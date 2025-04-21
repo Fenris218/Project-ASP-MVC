@@ -1,0 +1,240 @@
+﻿@model List<QuanLyPhongNet.Models.UsageRecord>
+@{
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+	ViewData["Title"] = "Thống kê";
+}
+
+<div class="container-fluid">
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mb-0 text-gray-800"><i class="bi bi-bar-chart me-2"></i>Thống kê</h1>
+	</div>
+
+	<div class="row mb-4">
+		<div class="col-md-4">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+								Tổng số người dùng
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totalUsers">TotalUsers</div>
+						</div>
+						<div class="col-auto">
+							<i class="bi bi-people fs-1 text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card border-left-success shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+								Tổng số máy
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="totalDevices">TotalDevices</div>
+						</div>
+						<div class="col-auto">
+							<i class="bi bi-pc-display fs-1 text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card border-left-warning shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+								Máy đang sử dụng
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" id="devicesInUse">DevicesInUse</div>
+						</div>
+						<div class="col-auto">
+							<i class="bi bi-pc-display-horizontal fs-1 text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mb-4">
+		<div class="col-md-4">
+			<div class="card shadow mb-4">
+				<div class="card-header py-3 bg-primary">
+					<h6 class="m-0 font-weight-bold text-white">Doanh thu hôm nay</h6>
+				</div>
+				<div class="card-body">
+					<h4 class="text-center text-success" id="todayRevenue">TodayRevenue</h4>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card shadow mb-4">
+				<div class="card-header py-3 bg-primary">
+					<h6 class="m-0 font-weight-bold text-white">Doanh thu tháng này</h6>
+				</div>
+				<div class="card-body">
+					<h4 class="text-center text-success" , id="monthRevenue">MonthRevenue</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3 bg-primary">
+			<h6 class="m-0 font-weight-bold text-white">Doanh thu tất cả thời gian</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" width="100%" cellspacing="0">
+					<thead class="thead-light">
+						<tr>
+							<th>Loại máy</th>
+							<th>Doanh thu</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td>Vip</td>
+							<td class="text-success font-weight-bold" , id="statsByDeviceVip">statsByDeviceVip</td>
+						</tr>
+						<tr>
+							<td>Standard</td>
+							<td class="text-success font-weight-bold" id="statsByDeviceStandard">statsByDeviceStandard</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3 bg-primary">
+			<h6 class="m-0 font-weight-bold text-white">Doanh thu hôm nay</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" width="100%" cellspacing="0">
+					<thead class="thead-light">
+						<tr>
+							<th>Loại máy</th>
+							<th>Doanh thu</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Vip</td>
+							<td class="text-success font-weight-bold" , id="todayStatsByDeviceVip">todayStatsByDeviceVip</td>
+						</tr>
+						<tr>
+							<td>Standard</td>
+							<td class="text-success font-weight-bold" id="todayStatsByDeviceStandard">todayStatsByDeviceStandard VNĐ</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3 bg-primary">
+			<h6 class="m-0 font-weight-bold text-white">Doanh thu theo loại máy (tháng này)</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" width="100%" cellspacing="0">
+					<thead class="thead-light">
+						<tr>
+							<th>Loại máy</th>
+							<th>Doanh thu</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Vip</td>
+							<td class="text-success font-weight-bold" , id="monthStatsByDeviceVip">monthStatsByDeviceVip</td>
+						</tr>
+						<tr>
+							<td>Standard</td>
+							<td class="text-success font-weight-bold" id="monthStatsByDeviceStandard">monthStatsByDeviceStandard VNĐ</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+			function updateDashboardStats() {
+			$.get("/Admin/GetDashboardStats")
+				.done(function(data) {
+					console.log("Dữ liệu API:", data); // Debug tại đây
+
+					// Cập nhật giá trị (kiểm tra null/undefined)
+					$("#totalUsers").text(data.totalUsers ?? "0");  // sửa thành viết thường
+					$("#totalDevices").text(data.totalDevices ?? "0");
+					$("#devicesInUse").text(data.devicesInUse ?? "0");
+					$("#todayRevenue").text((data.todayRevenue || 0).toLocaleString() + " VNĐ");
+					$("#monthRevenue").text((data.monthRevenue || 0).toLocaleString() + " VNĐ");
+
+					// Xử lý doanh thu theo loại máy
+					let vipRevenue = 0, standardRevenue = 0;
+					if (data.statsByDeviceType?.length > 0) {
+						data.statsByDeviceType.forEach(item => {
+							if (item.deviceName === "Vip") vipRevenue = item.totalRevenue;
+							if (item.deviceName === "Standard") standardRevenue = item.totalRevenue;
+						});
+					}
+					$("#statsByDeviceVip").text(vipRevenue.toLocaleString() + " VNĐ");
+					$("#statsByDeviceStandard").text(standardRevenue.toLocaleString() + " VNĐ");
+
+					// Xử lý doanh thu theo loại máy hôm nay
+					let todayVipRevenue = 0, todayStandardRevenue = 0;
+					if (data.statsByDeviceTypeToday?.length > 0) {
+						data.statsByDeviceTypeToday.forEach(item => {
+							if (item.deviceName === "Vip") todayVipRevenue = item.totalRevenue;
+							if (item.deviceName === "Standard") todayStandardRevenue = item.totalRevenue;
+						});
+					}
+					$("#todayStatsByDeviceVip").text(todayVipRevenue.toLocaleString() + " VNĐ");
+					$("#todayStatsByDeviceStandard").text(todayStandardRevenue.toLocaleString() + " VNĐ");
+
+					//xử lý doanh thu theo loại máy tháng này
+					let monthVipRevenue = 0, monthStandardRevenue = 0;
+					if (data.statsByDeviceTypeMonth?.length > 0) {
+						data.statsByDeviceTypeMonth.forEach(item => {
+							if (item.deviceName === "Vip") monthVipRevenue = item.totalRevenue;
+							if (item.deviceName === "Standard") monthStandardRevenue = item.totalRevenue;
+						});
+					}
+					$("#monthStatsByDeviceVip").text(monthVipRevenue.toLocaleString() + " VNĐ");
+					$("#monthStatsByDeviceStandard").text(monthStandardRevenue.toLocaleString() + " VNĐ");
+
+				})
+
+
+
+				.fail(function(error) {
+					console.error("Lỗi API:", error);
+					alert("Không tải được dữ liệu!");
+				});
+		}
+
+		// Gọi hàm khi trang load
+		$(document).ready(function() {
+			updateDashboardStats();
+			setInterval(updateDashboardStats, 5000); // Cập nhật mỗi 5s
+		});
+	</script>

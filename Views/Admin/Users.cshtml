@@ -1,0 +1,90 @@
+﻿@model QuanLyPhongNet.Models.AllModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Quản lý người chơi";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-people me-2"></i>Danh sách người chơi</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold ">Quản lý người dùng</h6>
+            <form method="get" class="d-flex">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchId" placeholder="Nhập ID người chơi" aria-label="Search">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search me-1"></i>Tìm kiếm
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Họ tên</th>
+                            <th>Tài khoản</th>
+                            <th>Mật khẩu</th>
+                            <th>Số dư</th>
+                            <th>Tình trạng</th>
+                            <th>Mã máy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            var usageRecord = Model.UsageRecords.FirstOrDefault(u => u.UserId == user.Id&& u.EndTime==null);
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Username</td>
+                                <td>
+                                    <span class="text-muted">••••••••</span>
+                                    <button class="btn btn-sm btn-link" onclick="togglePassword(this, '@user.Password')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                                <td>@user.Balance.ToString("N0") VNĐ</td>
+                                <td>
+                                    <span class="badge @(user.Status == "active" ? "bg-success" : "bg-warning")">
+                                        @user.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (usageRecord != null)
+                                    {
+                                        <span class="badge bg-primary">@usageRecord.DeviceId</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword(button, password) {
+        var td = button.closest('td');
+        var hiddenText = td.querySelector('.text-muted');
+
+        if (hiddenText.textContent === '••••••••') {
+            hiddenText.textContent = password;
+            button.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        } else {
+            hiddenText.textContent = '••••••••';
+            button.innerHTML = '<i class="bi bi-eye"></i>';
+        }
+    }
+</script>

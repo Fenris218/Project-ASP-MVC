@@ -1,0 +1,118 @@
+﻿@model QuanLyPhongNet.Models.User
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h2><i class="bi bi-person-plus me-2"></i>Đăng ký tài khoản</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Register" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Username" class="form-control" placeholder="Tên đăng nhập" required />
+                                    <label asp-for="Username"><i class="bi bi-person-fill me-2"></i>Tên đăng nhập</label>
+                                    <span asp-validation-for="Username" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Password" type="password" class="form-control" placeholder="Mật khẩu" required />
+                                    <label asp-for="Password"><i class="bi bi-lock-fill me-2"></i>Mật khẩu</label>
+                                    <span asp-validation-for="Password" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="FullName" class="form-control" placeholder="Họ và tên" required />
+                            <label asp-for="FullName"><i class="bi bi-card-text me-2"></i>Họ và tên</label>
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Phone" class="form-control" placeholder="Số điện thoại" required />
+                                    <label asp-for="Phone"><i class="bi bi-telephone-fill me-2"></i>Số điện thoại</label>
+                                    <span asp-validation-for="Phone" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Balance" type="number" step="1000" class="form-control" placeholder="Số dư tài khoản" required />
+                                    <label asp-for="Balance"><i class="bi bi-wallet2 me-2"></i>Số dư tài khoản (VND)</label>
+                                    <span asp-validation-for="Balance" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-person-check me-2"></i>Đăng ký
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-4 pt-3 border-top">
+                            <a asp-action="Login" class="text-decoration-none">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Đã có tài khoản? Đăng nhập tại đây.
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 0.5rem;
+    }
+
+    .card-header {
+        border-radius: 0.5rem 0.5rem 0 0 !important;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+    a {
+        color: var(--primary-color);
+        transition: color 0.3s;
+    }
+
+        a:hover {
+            color: var(--accent-color);
+        }
+
+    .text-danger {
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

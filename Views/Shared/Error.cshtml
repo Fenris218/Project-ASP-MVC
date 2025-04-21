@@ -1,0 +1,24 @@
+﻿@model QuanLyPhongNet.Models.ErrorViewModel
+
+<div style="text-align:center; margin-top: 100px;">
+    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" width="100" />
+    <h1 style="color: #e74c3c;">Oops! Có lỗi xảy ra.</h1>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <p>@ViewBag.Error</p>
+    }
+    else
+    {
+        <p>Hệ thống đã gặp lỗi trong quá trình xử lý yêu cầu của bạn.</p>
+    }
+
+    @if (Model?.RequestId != null)
+    {
+        <p><strong>Mã lỗi (RequestId):</strong> <code>@Model.RequestId</code></p>
+    }
+
+    <a href="/" style="color: white; background-color: #3498db; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+        Quay lại Trang chủ
+    </a>
+</div>

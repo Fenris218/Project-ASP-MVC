@@ -1,0 +1,175 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Game Khủng Long Mất Mạng";
+}
+
+<style>
+    body {
+        background: #f7f7f7;
+        margin: 0;
+        font-family: sans-serif;
+        overflow: hidden;
+    }
+
+    #game {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        background: #fff;
+        border-bottom: 2px solid #333;
+        overflow: hidden;
+    }
+
+    #dino {
+        position: absolute;
+        bottom: 0;
+        left: 50px;
+        width: 50px;
+        height: 50px;
+        /* background: url('https://i.ibb.co/SV97r2q/dino.png') no-repeat center/contain; */
+    }
+
+    .obstacle {
+        position: absolute;
+        bottom: 0;
+        width: 30px;
+        height: 50px;
+        background: url('@Url.Content("~/Images/cactus.png")') no-repeat center/contain;
+    }
+
+    #score {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 24px;
+        color: #333;
+    }
+
+    #game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        display: none;
+    }
+
+    #restart-btn {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="game">
+    <img src="~/Images/dinosaur.png" id="dino">
+    <div id="score">0</div>
+    <div id="game-over">
+        <h2>Game Over!</h2>
+        <p>Điểm của bạn: <span id="final-score">0</span></p>
+        <button id="restart-btn">Chơi lại</button>
+    </div>
+</div>
+
+<script>
+    const dino = document.getElementById("dino");
+    const game = document.getElementById("game");
+    const scoreDisplay = document.getElementById("score");
+    const gameOverScreen = document.getElementById("game-over");
+    const finalScoreDisplay = document.getElementById("final-score");
+    const restartBtn = document.getElementById("restart-btn");
+
+    let jumping = false;
+    let score = 0;
+    let gameRunning = true;
+    let obstacleIntervals = [];
+
+    function jump() {
+        if (jumping || !gameRunning) return;
+        jumping = true;
+        let position = 0;
+        let upInterval = setInterval(() => {
+            if (position >= 150) {
+                clearInterval(upInterval);
+                let downInterval = setInterval(() => {
+                    if (position <= 0) {
+                        clearInterval(downInterval);
+                        jumping = false;
+                    } else {
+                        position -= 5;
+                        dino.style.bottom = position + "px";
+                    }
+                }, 20);
+            } else {
+                position += 5;
+                dino.style.bottom = position + "px";
+            }
+        }, 20);
+    }
+
+    function createObstacle() {
+        if (!gameRunning) return;
+
+        const obstacle = document.createElement("div");
+        obstacle.classList.add("obstacle");
+        obstacle.style.left = "100%";
+        game.appendChild(obstacle);
+
+        let moveInterval = setInterval(() => {
+            let obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+            if (obstacleLeft <= -30) {
+                clearInterval(moveInterval);
+                game.removeChild(obstacle);
+                score++;
+                scoreDisplay.innerText = score;
+            } else if (obstacleLeft <= 100 && obstacleLeft >= 50 && parseInt(dino.style.bottom || 0) < 50) {
+                gameOver();
+            } else {
+                obstacle.style.left = obstacleLeft - 5 + "px";
+            }
+        }, 20);
+
+        obstacleIntervals.push(moveInterval);
+    }
+
+    function gameOver() {
+        gameRunning = false;
+        finalScoreDisplay.textContent = score;
+        gameOverScreen.style.display = "block";
+
+        // Clear all obstacle intervals
+        obstacleIntervals.forEach(interval => clearInterval(interval));
+        obstacleIntervals = [];
+    }
+
+    function restartGame() {
+        // Remove all obstacles
+        document.querySelectorAll('.obstacle').forEach(obstacle => obstacle.remove());
+
+        // Reset game state
+        gameRunning = true;
+        score = 0;
+        scoreDisplay.innerText = "0";
+        dino.style.bottom = "0";
+        gameOverScreen.style.display = "none";
+
+        // Start creating obstacles again
+        obstacleCreationInterval = setInterval(createObstacle, 2000);
+    }
+
+    let obstacleCreationInterval = setInterval(createObstacle, 2000);
+
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") jump();
+    });
+
+    restartBtn.addEventListener("click", restartGame);
+</script>

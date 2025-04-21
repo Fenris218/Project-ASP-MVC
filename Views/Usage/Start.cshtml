@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Bắt đầu sử dụng";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-play-circle me-2"></i>Bắt đầu sử dụng</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">Chọn loại máy để sử dụng</h6>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form id="usageForm">
+                <div class="mb-3 form-floating">
+                    <select class="form-select" id="DeviceType" name="DeviceType" required>
+                        <option value="Standard">Standard</option>
+                        <option value="VIP">VIP</option>
+                    </select>
+                    <label for="DeviceType">Loại máy</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-play-circle me-1"></i> Bắt đầu sử dụng
+                </button>
+            </form>
+
+            <div id="result" class="mt-3"></div>
+           
+            @if (ViewBag.Username != null)
+            {
+                <div class="mt-4">
+                    <h5 class="text-primary">Xin chào, <strong>@ViewBag.Username!</strong></h5>
+                    <p><strong>Máy:</strong> @ViewBag.DeviceName</p>
+                    <p><strong>Thời gian bắt đầu:</strong> @ViewBag.StartTime</p>
+                    <p><strong>Tổng chi phí:</strong> @ViewBag.TotalCost</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener("beforeunload", function (e) {
+        navigator.sendBeacon("/Usage/StopUsage");
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $("#usageForm").submit(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/Usage/Start",
+            method: "POST",
+            data: $(this).serialize(),
+            success: function (res) {
+                if (res.success) {
+                    $("#usageForm").hide();
+                    $("#result").html(`
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Đã bắt đầu sử dụng máy <strong>${res.deviceId}</strong> loại <strong>${res.deviceType}</strong>.
+                        </div>
+                        <a href="/User/Play" class="btn btn-success mt-2">
+                            <i class="bi bi-controller me-1"></i> Play
+                        </a>
+                    `);
+                } else {
+                    $("#result").html(`<div class="alert alert-danger">${res.message}</div>`);
+                }
+            },
+            error: function (err) {
+                $("#result").html(`<div class="alert alert-danger">Có lỗi xảy ra: ${err.responseText}</div>`);
+            }
+        });
+    });
+</script>
